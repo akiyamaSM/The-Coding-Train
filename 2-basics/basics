@@ -1,0 +1,5 @@
+size(width, height); // to set the size of the window (100, 100) is set by default
+line(x1, y1, x2, y2); // draw a line between the (x1, y1) and (x2, y2)
+rect(x, y, width, height); // (x, y) are the origin of the rectangle (Top left of it)
+
+for more information about basic functions https://processing.org/reference/
