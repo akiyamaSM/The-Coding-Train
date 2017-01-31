@@ -1,0 +1,7 @@
+Every(almost) shape is composed of an outline called stroke and what is inside it called fill
+stroke(R, G, B); 
+fill(R, G, B);
+background(R, G, B);
+strock/fill/background(sameNumber, sameNumber, sameNumber) === strock/fill/background(sameNumber)
+
+strock and fill should be overrided otherwise the same values will be used for all of the remaining code
