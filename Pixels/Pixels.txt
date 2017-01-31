@@ -1,0 +1,12 @@
+1 - the origin of the window(0, 0) is the top left of window
+
+------------------------------------------------> x
+|
+|
+|
+|
+|
+|
+y
+
+2 - window's height and width should be defined
