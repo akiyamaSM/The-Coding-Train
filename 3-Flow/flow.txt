@@ -1,0 +1,14 @@
+There are some built-in functions like
+void setup(){
+  // What is inside here gets executed just once
+  // At the begining
+}
+
+void draw(){
+  // what is inside here gets executed forever
+}
+There are Events like mousePressed(), mouseReleased ....
+And there are some Built-in variables such as :
+- mouseX : it stands for the x value of where the mouse is at that instant
+  the same for mouseY
+- pmouseX : the previous position of the mouseX
