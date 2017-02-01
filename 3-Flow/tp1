@@ -1,0 +1,31 @@
+Drawing by dragging the mouse 
+Cleaning by Pressing the SPACE button
+
+void setup()
+{
+  size(640, 360);
+  background(50);
+}
+
+void draw()
+{
+}
+
+void mouseDragged()
+{
+  strokeWeight(1);
+  stroke(255);
+  line(pmouseX, pmouseY, mouseX, mouseY);
+}
+
+void keyPressed()
+{
+
+  if (keyCode == ' ')
+  {
+    fill(50);
+    stroke(50);
+    rect(mouseX, mouseY, 10, 10);
+    
+  }
+}
