@@ -3,6 +3,7 @@ float circleY;
 float speedX = 1;
 int rectheight = 30;
 int rects = 7;
+boolean started = false;
 
 float[] tabRectX = new float[rects];
 float[] tabRectY = new float[rects];
@@ -17,37 +18,39 @@ void setup()
   circleX = 0;
   circleY = height/2;
   initRects();
-  
 }
 
-void draw(){
+void draw() {
   background(25);
   fill(255);
   stroke(30);
-  do{
+  do {
     drawRects();
-  
-  ellipse(circleX, circleY, 10, 10);
-  
-  // UPDATE
-  moveRects();
-  circleX  =circleX + speedX;
-  
-  if(cirlceHitsWall())
-  {
-    winGame();
-  }
-  
-  if(circleHitsRect())
-  {
-    lostGame();
-  }
-  
-  goBackIfItHitsTheWall();
-  
-  }while(isTheEnd());
-  
-  
+
+    ellipse(circleX, circleY, 10, 10);
+    
+    
+    // UPDATE
+    moveRects();
+    
+    if(started)
+      circleX  =circleX + speedX;
+
+
+    if (cirlceHitsWall())
+    {
+      winGame();
+    }
+
+    if (circleHitsRect())
+    {
+      lostGame();
+    }
+
+    goBackIfItHitsTheWall();
+    
+  } while (isTheEnd());
+
 }
 
 void bounce()
@@ -72,23 +75,21 @@ void lostGame()
 
 void moveRects()
 {
-  for(int i=0 ; i < rects; i++)
+  for (int i=0; i < rects; i++)
   {
     tabRectY[i] = tabRectY[i] + rectSpeed[i];
   }
-  
 }
 
 void goBackIfItHitsTheWall()
 {
-    for(int i=0 ; i < rects; i++)
+  for (int i=0; i < rects; i++)
+  {
+    if (tabRectY[i] >= (height - rectheight) || tabRectY[i] <=0)
     {
-       if(tabRectY[i] >= (height - rectheight) || tabRectY[i] <=0)
-       {
-         goBack(i);
-       }
+      goBack(i);
     }
-
+  }
 }
 
 void goBack(int i)
@@ -99,17 +100,17 @@ void goBack(int i)
 void initRects()
 {
   float from = 10;
-  for(int i=0; i < rects; i++){
-      tabRectX[i] = random(0, width);
-      tabRectY[i] = 0;
-      rectSpeed[i] = random(0.5, 1.3);
-      from = tabRectX[i];
+  for (int i=0; i < rects; i++) {
+    tabRectX[i] = random(0, width);
+    tabRectY[i] = 0;
+    rectSpeed[i] = random(0.5, 1.3);
+    from = tabRectX[i];
   }
 }
 
 void drawRects()
 {
-  for(int i=0 ; i < rects; i++){
+  for (int i=0; i < rects; i++) {
     rect(tabRectX[i], tabRectY[i], 5, rectheight);
   }
 }
@@ -121,16 +122,35 @@ boolean isTheEnd()
 
 boolean circleHitsRect()
 {
-      for(int i=0 ; i < rects; i++)
-      {
-         if((int)circleX == (int)tabRectX[i])
-         {
-           
-           if(((int)circleY >= (int)tabRectY[i] &&  (int)circleY< (int)(tabRectY[i] + rectheight)))
-             return true;
-         }
-      }
-      
-      return false;
+  for (int i=0; i < rects; i++)
+  {
+    if ((int)circleX == (int)tabRectX[i])
+    {
 
+      if (((int)circleY >= (int)tabRectY[i] &&  (int)circleY< (int)(tabRectY[i] + rectheight)))
+        return true;
+    }
+  }
+
+  return false;
+}
+
+void printResult()
+{
+
+  println("Im here to print");
+  textSize(32);
+  fill(0, 102, 153, 204);
+
+  if (wins) {
+
+    text("YOU WIN!", 12, 60);
+  } else {
+
+    text("YOU LOST!", 12, 60);
+  }
+}
+
+void mousePressed(){
+  started = true;
 }
