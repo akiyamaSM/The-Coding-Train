@@ -1,20 +1,21 @@
 float circleX;
 float circleY;
 float speedX = 1;
-float rectX;
-float rectY;
-int rects = 5;
+int rectheight = 30;
+int rects = 7;
+
 float[] tabRectX = new float[rects];
 float[] tabRectY = new float[rects];
 float[] rectSpeed = new float[rects];
+
+boolean wins = false;
+boolean lost = false;
 
 void setup()
 {
   size(600, 400);
   circleX = 0;
   circleY = height/2;
-  rectX = width/2;
-  rectY = 0;
   initRects();
   
 }
@@ -23,7 +24,8 @@ void draw(){
   background(25);
   fill(255);
   stroke(30);
-  drawRects();
+  do{
+    drawRects();
   
   ellipse(circleX, circleY, 10, 10);
   
@@ -33,10 +35,18 @@ void draw(){
   
   if(cirlceHitsWall())
   {
-    bounce();
+    winGame();
+  }
+  
+  if(circleHitsRect())
+  {
+    lostGame();
   }
   
   goBackIfItHitsTheWall();
+  
+  }while(isTheEnd());
+  
   
 }
 
@@ -47,7 +57,17 @@ void bounce()
 
 boolean cirlceHitsWall()
 {
-  return circleX >= width || circleX <=0;
+  return circleX >= width;
+}
+
+void winGame()
+{
+  wins = true;
+}
+
+void lostGame()
+{
+  lost = true;
 }
 
 void moveRects()
@@ -63,7 +83,7 @@ void goBackIfItHitsTheWall()
 {
     for(int i=0 ; i < rects; i++)
     {
-       if(tabRectY[i] >= (height-20) || tabRectY[i] <=0)
+       if(tabRectY[i] >= (height - rectheight) || tabRectY[i] <=0)
        {
          goBack(i);
        }
@@ -80,7 +100,7 @@ void initRects()
 {
   float from = 10;
   for(int i=0; i < rects; i++){
-      tabRectX[i] = random(from, width);
+      tabRectX[i] = random(0, width);
       tabRectY[i] = 0;
       rectSpeed[i] = random(0.5, 1.3);
       from = tabRectX[i];
@@ -90,6 +110,27 @@ void initRects()
 void drawRects()
 {
   for(int i=0 ; i < rects; i++){
-    rect(tabRectX[i], tabRectY[i], 5, 20);
+    rect(tabRectX[i], tabRectY[i], 5, rectheight);
   }
+}
+
+boolean isTheEnd()
+{
+  return wins || lost;
+}
+
+boolean circleHitsRect()
+{
+      for(int i=0 ; i < rects; i++)
+      {
+         if((int)circleX == (int)tabRectX[i])
+         {
+           
+           if(((int)circleY >= (int)tabRectY[i] &&  (int)circleY< (int)(tabRectY[i] + rectheight)))
+             return true;
+         }
+      }
+      
+      return false;
+
 }
