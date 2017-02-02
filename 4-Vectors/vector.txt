@@ -8,3 +8,5 @@ add : vector.add(anOther) : (vector.x = vector.x + anOther.x, vector.y = vector.
 sub 
 mult(number) : scaller
 mag() : returns its magnitude sqrt(x^2 + y^2)
+
+Acceleration : change of velocity over time
