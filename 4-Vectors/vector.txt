@@ -1,0 +1,10 @@
+Vector :
+- magnitude(length/size).
+- direction.
+
+PVector : Positions (x, y, z)
+
+add : vector.add(anOther) : (vector.x = vector.x + anOther.x, vector.y = vector.y + anOther.y )
+sub 
+mult(number) : scaller
+mag() : returns its magnitude sqrt(x^2 + y^2)
