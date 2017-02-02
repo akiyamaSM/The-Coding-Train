@@ -1,0 +1,8 @@
+A Force is a Vector that causes an object with mass to accelerate
+F = M*A  => A=F/M
+Wind, Gravity .... 
+Supposing the mass is equal to 1.
+then we will need to implement the algorithm of Force!
+
+Each frame is a new moment, the time unit!
+need to clear the acceleration at the end of the update
