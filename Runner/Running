@@ -1,0 +1,79 @@
+import processing.sound.*;
+SoundFile run;
+SoundFile jump;
+SoundFile gameOVer;
+SoundFile land;
+Person p;
+Hurdle hurdle;
+boolean created = false;
+boolean touchedHurdle = false;
+int points = 0;
+
+void setup() {
+  size(640, 360);
+
+  p = new Person(new Jumper());
+  hurdle = new Hurdle();
+  run = new SoundFile(this, "runBreath.mp3");
+  jump = new SoundFile(this, "jump.mp3");
+  gameOVer = new SoundFile(this, "gameOVer.mp3");
+  land = new SoundFile(this, "land.mp3");
+  run.play();
+}
+
+void draw() {
+  
+  background(25);
+  
+  textSize(25);
+  text("You have : "+ points + " point", 10, 30); 
+  
+  translate(- (p.location.x - 50), 0);
+  PVector gravity = new PVector(0, 0.1);
+
+  
+  
+  p.applyForce(gravity);
+  
+  p.update();
+  p.edges(land);
+  p.display();
+  
+  if(!created){
+    createObstacle();
+  }
+  
+  hurdle.display();  
+  touchedHurdle = hurdle.touchedBy(p);
+  if(touchedHurdle)
+  {
+    run.stop();
+    noLoop();
+    gameOVer.play();
+  }
+    
+
+  if(hurdle.gotJumpedBy(p) && p.hasLanded())
+  {
+    created = false;
+    points ++;
+    p.accelerate();
+  }
+}
+
+
+void keyPressed()
+{
+
+  if(key == ' ')
+  {
+    
+    p.jump(jump);
+  }
+}
+
+void createObstacle()
+{
+  hurdle.getPosition(p);
+  created = true;
+}
