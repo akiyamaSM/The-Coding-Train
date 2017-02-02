@@ -1,0 +1,24 @@
+Implementing friction
+
+void draw() {
+  background(255);
+
+  PVector wind = new PVector(0.01, 0);
+  PVector gravity = new PVector(0, 0.1);
+
+
+  m.applyForce(wind);
+  m.applyForce(gravity);
+
+  PVector friction = m.velocity.get();
+  friction.normalize();
+  
+  float c = -0.01;
+  friction.mult(c);
+  m.applyForce(friction);
+  
+  m.update();
+  m.edges();
+  m.display();
+
+}
