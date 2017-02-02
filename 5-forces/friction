@@ -1,0 +1,13 @@
+Friction force (Resistance)
+Friction = - |u * norm * norm(V)|
+norm = 1
+u : coefficient of friction
+
+PVector friction = velocity.getCopy()
+// Direction
+friction.normilize()
+friction.mult(-1)
+
+// Magnitude
+float u = 0.01;
+friction.mult(u);
