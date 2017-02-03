@@ -2,8 +2,9 @@ class Hurdle
 {
   float tall;
   float wid;
-  float where = 350;
+  float where = 270;
   int colorHurdle;
+  
   Hurdle()
   {
     tall = random(20, 60);
@@ -20,14 +21,14 @@ class Hurdle
   void display()
   {
     fill(colorHurdle);
-    rect(where, height-tall, wid, tall);
+    rect(where, (height- GROUND -tall), wid, tall);
   }
   
   boolean touchedBy(Person p)
   {
     if((int)(p.location.x + p.wid) == (int)(where))
     {
-      if((int)(p.location.y + p.tall) > (int)(height - tall))
+      if(!((int)(p.location.y) < (int)(height - GROUND - tall)))
       {
         return true;
       }
