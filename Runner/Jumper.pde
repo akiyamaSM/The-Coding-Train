@@ -31,4 +31,9 @@ class Jumper
       landSound.play();
     jumped = false;
   }
+  
+  PVector fall()
+  {
+    return new PVector(0, 30);
+  }
 }
