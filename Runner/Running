@@ -3,71 +3,108 @@ SoundFile run;
 SoundFile jump;
 SoundFile gameOVer;
 SoundFile land;
+SoundFile falling;
 Person p;
 Hurdle hurdle;
+Hole hole;
+int rand;
+PImage bg;
+CarpetJet carpetJet;
+
 boolean created = false;
 boolean touchedHurdle = false;
 int points = 0;
-
+int GROUND = 10;
 void setup() {
   size(640, 360);
 
   p = new Person(new Jumper());
   hurdle = new Hurdle();
+  hole = new Hole();
+  carpetJet = new CarpetJet();
   run = new SoundFile(this, "runBreath.mp3");
   jump = new SoundFile(this, "jump.mp3");
   gameOVer = new SoundFile(this, "gameOVer.mp3");
   land = new SoundFile(this, "land.mp3");
-  run.play();
+  falling = new SoundFile(this, "falling.mp3");
+  bg = loadImage("back.png");
+  run.loop();
 }
 
 void draw() {
-  
-  background(25);
-  
+    
+  background(bg);
+  stroke(255);
+
+  // Ground
+  fill(255);
+  rect(0, height-GROUND, width, GROUND);
+
+  // Score
   textSize(25);
   text("You have : "+ points + " point", 10, 30); 
-  
+
   translate(- (p.location.x - 50), 0);
   PVector gravity = new PVector(0, 0.1);
 
-  
-  
-  p.applyForce(gravity);
-  
+
+
+  if(!p.isOnJet())
+  {
+    p.applyForce(gravity);
+  }
+    
+
   p.update();
   p.edges(land);
   p.display();
   
-  if(!created){
-    createObstacle();
+  if(points<1)
+  {
+    stageOne();
+    
+  }else{
+    
+    if(!created)
+    {
+      carpetJet.getPosition(p);
+      created = true;
+    }
+    
+    if(carpetJet.getOnBy(p))
+    {
+      p.landOnJet(carpetJet);
+    }
+    
+    if(p.isOnJet())
+    {
+      carpetJet.flyBy(p);
+      
+    }
+      carpetJet.display();
+
   }
   
-  hurdle.display();  
-  touchedHurdle = hurdle.touchedBy(p);
-  if(touchedHurdle)
-  {
-    run.stop();
-    noLoop();
-    gameOVer.play();
-  }
-    
 
-  if(hurdle.gotJumpedBy(p) && p.hasLanded())
-  {
-    created = false;
-    points ++;
-    p.accelerate();
-  }
 }
 
 
 void keyPressed()
 {
-
-  if(key == ' ')
+  if(p.isOnJet() && keyCode == UP)
   {
-    
+    println("UP");
+    carpetJet.flyUp(p);
+  }
+  
+  if(p.isOnJet() && keyCode == DOWN)
+  {
+    carpetJet.flyDown(p);
+  }
+
+  if (key == ' ')
+  {
+
     p.jump(jump);
   }
 }
@@ -76,4 +113,116 @@ void createObstacle()
 {
   hurdle.getPosition(p);
   created = true;
+}
+
+
+
+void generatObstacle()
+{
+  switch(rand)
+  {
+      case(1):
+          hurdle.getPosition(p);
+        break;
+        
+      case(2):
+          hole.getPosition(p);
+        break;
+  }
+  
+  created = true;
+}
+
+boolean passedObstacle()
+{
+  boolean result = false;
+  
+    switch(rand)
+    {
+      case(1):
+        result =  hurdle.gotJumpedBy(p);
+        break;
+        
+      case(2):
+        result =  hole.gotJumpedBy(p);
+        break;
+    }
+
+return result;
+}
+
+
+void display()
+{
+  switch(rand)
+  {
+      case(1):
+          hurdle.display();
+        break;
+        
+      case(2):
+          hole.display();
+        break;
+  }
+
+}
+
+boolean handleTouch()
+{
+  boolean result = false;
+  
+    switch(rand)
+    {
+      case(1):
+        result =  hurdle.touchedBy(p);
+        break;
+        
+      case(2):
+        result =  hole.touchedBy(p);
+        break;
+    }
+
+return result;
+
+}
+
+
+void handleDeathSound()
+{
+      switch(rand)
+    {
+      case(1):
+        gameOVer.play();
+        break;
+        
+      case(2):
+        falling.play();
+        break;
+    }
+
+}
+
+void stageOne()
+{
+if (!created) {
+    rand = int(random(1, 2.99));
+    println(rand);
+    generatObstacle();
+  }
+  display();
+  touchedHurdle = handleTouch();
+  if (touchedHurdle)
+  {
+    run.stop();
+    
+    noLoop();
+    handleDeathSound();
+  }  
+  
+  if(passedObstacle() && p.hasLanded())
+  {
+     created = false;
+     points ++;
+     p.accelerate();
+  }
 }
