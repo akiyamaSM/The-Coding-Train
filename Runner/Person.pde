@@ -8,12 +8,15 @@ class Person
   int tall = 50;
   int wid = 30;
   float speed = 1;
+  boolean inHole = false;
+  boolean onCarpet = false;
+  
   
   Jumper jumper;
   
   Person(Jumper jumper)
   {
-    location = new PVector(10, height);
+    location = new PVector(10, height-GROUND);
     velocity = new PVector(speed, 0);
     acceleration = new PVector(0, 0);
     this.jumper = jumper;
@@ -39,17 +42,18 @@ class Person
   
   boolean hasLanded()
   {
-    return (int) (location.y) == (int)height;
+    return (int) (location.y) == (int)(height - GROUND);
   }
 
   void edges(SoundFile landSound)
   {
-    if (location.y > height) {
+    if (!inHole && location.y > (height-GROUND)) {
       velocity.y *= 0;
       velocity.x = speed;
-      location.y = height;
+      location.y = height - GROUND;
       jumper.land(landSound);
     }
+    
   }
   
   void jump(SoundFile jumpEffect)
@@ -66,5 +70,26 @@ class Person
   PVector getVelocity()
   {
     return velocity;
+  }
+  
+  void fall()
+  {
+    inHole = true;
+    applyForce( jumper.fall());
+    update();
+    display();
+  }
+  
+  void landOnJet(CarpetJet carpet)
+  {
+    velocity.y *= 0;
+    onCarpet = true;
+    location.y = carpet.yPosition;
+  }
+  
+  
+  boolean isOnJet()
+  {
+    return onCarpet;
   }
 }
