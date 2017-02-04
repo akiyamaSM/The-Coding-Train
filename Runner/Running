@@ -7,31 +7,59 @@ SoundFile falling;
 Person p;
 Hurdle hurdle;
 Hole hole;
+MultipleHurdle multi;
 int rand;
 PImage bg;
+PImage imageCarpet;
 CarpetJet carpetJet;
+
+Slower fruit;
 
 boolean created = false;
 boolean touchedHurdle = false;
 int points = 0;
 int GROUND = 10;
-void setup() {
+boolean multipleHurdleCreated = false;
+
+
+int numFrames = 16;
+int frame = 0;
+PImage[] images = new PImage[numFrames];;
+
+
+void setup() 
+{
   size(640, 360);
 
   p = new Person(new Jumper());
-  hurdle = new Hurdle();
+  PImage hurdleImage = loadImage("hurdle.png");
+  hurdle = new Hurdle(hurdleImage);
+  PImage pipeUP = loadImage("PIPE_UP.png");
+  PImage pipeDown = loadImage("PIPE_DOWN.png");
+  
+  multi = new MultipleHurdle(pipeUP, pipeDown);
   hole = new Hole();
-  carpetJet = new CarpetJet();
+  imageCarpet = loadImage("carpet.png");
+  carpetJet = new CarpetJet(imageCarpet);
+  fruit = new Slower();
   run = new SoundFile(this, "runBreath.mp3");
   jump = new SoundFile(this, "jump.mp3");
   gameOVer = new SoundFile(this, "gameOVer.mp3");
   land = new SoundFile(this, "land.mp3");
   falling = new SoundFile(this, "falling.mp3");
   bg = loadImage("back.png");
+  
   run.loop();
+  
+    for(int i=0; i<numFrames; i++)
+    images[i] = loadImage((i+1) + ".png");
+       frameRate(50);
+  
+  
 }
 
-void draw() {
+void draw() 
+{
     
   background(bg);
   stroke(255);
@@ -44,9 +72,8 @@ void draw() {
   textSize(25);
   text("You have : "+ points + " point", 10, 30); 
 
-  translate(- (p.location.x - 50), 0);
-  PVector gravity = new PVector(0, 0.1);
-
+  translate(- (p.location.x - 35), 0);
+  PVector gravity = new PVector(0, 0.08);
 
 
   if(!p.isOnJet())
@@ -57,10 +84,11 @@ void draw() {
 
   p.update();
   p.edges(land);
-  p.display();
   
-  if(points<1)
+  
+  if(points<5)
   {
+    p.display();
     stageOne();
     
   }else{
@@ -69,6 +97,16 @@ void draw() {
     {
       carpetJet.getPosition(p);
       created = true;
+    }
+    
+    if(points%2 == 0 && !fruit.isFruitCreated())
+    {
+      fruit.getPosition(p);
+    }
+    
+    if(fruit.isFruitCreated())
+    {
+      fruit.display();
     }
     
     if(carpetJet.getOnBy(p))
@@ -80,9 +118,45 @@ void draw() {
     {
       carpetJet.flyBy(p);
       
+      
+      if(!multipleHurdleCreated)
+      {
+        multipleHurdleCreated = true;
+        println("my Location before " + p.location.x);
+        multi.getPosition(p);
+      }
+      
     }
-      carpetJet.display();
+    
+    
+    if(multipleHurdleCreated)
+    {
+      multi.display();
+    }
 
+    carpetJet.display();
+    p.display();
+    
+    if(p.isOnJet())
+    {  
+      if(multi.gotJumpedBy(p))
+      {
+       multipleHurdleCreated = false;
+       points ++;
+       carpetJet.accelerateBy(p);
+      }
+      
+      touchedHurdle = multi.touchedBy(p);
+      if (touchedHurdle)
+      {
+        run.stop();
+        
+        noLoop();
+        gameOVer.play();
+      }
+    }
+    
+    
   }
   
 
@@ -93,7 +167,6 @@ void keyPressed()
 {
   if(p.isOnJet() && keyCode == UP)
   {
-    println("UP");
     carpetJet.flyUp(p);
   }
   
@@ -206,7 +279,6 @@ void stageOne()
 {
 if (!created) {
     rand = int(random(1, 2.99));
-    println(rand);
     generatObstacle();
   }
   display();
