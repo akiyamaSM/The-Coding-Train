@@ -3,8 +3,8 @@ class Hole
 
   float tall = GROUND;
   float wid;
-  float where = 200;
-
+  float where;
+  float SPACE = width;
   Hole()
   {
     wid = random(110, 150);
@@ -12,7 +12,7 @@ class Hole
 
   void getPosition(Person p)
   {
-    where = where + p.location.x;
+    where = SPACE + p.location.x;
   }
 
   void display()
