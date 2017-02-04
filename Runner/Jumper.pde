@@ -4,8 +4,8 @@ import processing.sound.*;
 class Jumper
 {
   SoundFile jump;
-  float x = 1;
-  float y = -4;
+  float x = 0.98;
+  float y = -3.567;
   
   boolean jumped = false;
   
