@@ -2,29 +2,34 @@ class CarpetJet
 {
   float tall;
   float wid;
-  float where = 300;
+  float where = width;
   float yPosition;
+  PImage carpet;
+  float speed = 10;
   
-  float speed = 5; 
-  CarpetJet()
+  CarpetJet(PImage carpet)
   {
-    tall = 4;
-    wid = random(40, 60);
+    tall = 10;
+    wid = random(50, 60);
+    carpet.resize((int) wid, (int) tall);
+    this.carpet = carpet;
   }
   
   void getPosition(Person p)
   {
+    where = width;
     where = where + p.location.x;
     yPosition = (height - GROUND - 40);
   }
   
   void display()
   {
-    strokeWeight(5);
-    fill(255);
-    stroke(255);
-    rect(where, yPosition, wid, tall);
-    strokeWeight(1);
+    //strokeWeight(5);
+    //fill(255);
+    //stroke(255);
+    //rect(where, yPosition, wid, tall);
+    image(carpet, where, yPosition);
+    //strokeWeight(1);
   }
   
   boolean touchedBy(Person p)
@@ -57,7 +62,7 @@ class CarpetJet
       return false;
     }
     
-    int yLocationLow = int(p.location.y) +1;
+    int yLocationLow = int(p.location.y);
     
     
     if(yLocationLow - int(yPosition) != 0  )
@@ -77,11 +82,25 @@ class CarpetJet
   void flyUp(Person p)
   {
     yPosition = yPosition - speed;
+    p.location.y = p.location.y - speed;
   }
   
-    void flyDown(Person p)
+  void flyDown(Person p)
   {
     yPosition = yPosition + speed;
+    p.location.y = p.location.y + speed;
   }
   
+  
+  void accelerateBy(Person p)
+  {
+    float speedFly  = p.speed + 0.001;
+    p.applyForce( new PVector(speedFly, 0));
+  }
+  
+  void slowDown(Person p)
+  {
+    float speedFly  = p.speed - 0.09;
+    p.applyForce( new PVector(speedFly, 0));
+  }
 }
