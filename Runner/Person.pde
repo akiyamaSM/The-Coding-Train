@@ -37,7 +37,10 @@ class Person
   void display()
   {
     fill(127);
-    rect(location.x, location.y-tall , wid, tall);
+    //rect(location.x, location.y-tall , wid, tall);
+    frame = (frame+1)%numFrames;
+    isOnJet();
+    image(images[frame], location.x, location.y-tall);
   }
   
   boolean hasLanded()
@@ -90,6 +93,12 @@ class Person
   
   boolean isOnJet()
   {
-    return onCarpet;
+    if(onCarpet)
+    {
+      frame = 1;
+      return true;
+    }
+    
+    return false;
   }
 }
