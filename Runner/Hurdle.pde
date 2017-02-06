@@ -24,7 +24,7 @@ class Hurdle
   void getPosition(Person p)
   {
     generate();
-    SPACE = random(0.75 * width, width + width/2);
+    SPACE = random(0.75 * width, width + width/3);
     where = SPACE + p.location.x;
   }
   
