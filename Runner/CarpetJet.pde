@@ -100,7 +100,7 @@ class CarpetJet
   
   void slowDown(Person p)
   {
-    float speedFly  = p.speed - 0.09;
+    float speedFly  = p.speed - 0.1;
     p.applyForce( new PVector(speedFly, 0));
   }
 }
