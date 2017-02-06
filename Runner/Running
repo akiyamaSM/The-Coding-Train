@@ -7,7 +7,7 @@ SoundFile falling;
 Person p;
 Hurdle hurdle;
 Hole hole;
-MultipleHurdle multi;
+Pipe multi;
 int rand;
 PImage bg;
 PImage imageCarpet;
@@ -37,7 +37,7 @@ void setup()
   PImage pipeUP = loadImage("PIPE_UP.png");
   PImage pipeDown = loadImage("PIPE_DOWN.png");
   
-  multi = new MultipleHurdle(pipeUP, pipeDown);
+  multi = new Pipe(pipeUP, pipeDown);
   hole = new Hole();
   imageCarpet = loadImage("carpet.png");
   carpetJet = new CarpetJet(imageCarpet);
@@ -86,7 +86,7 @@ void draw()
   p.edges(land);
   
   
-  if(points<5)
+  if(points<2)
   {
     p.display();
     stageOne();
@@ -107,6 +107,17 @@ void draw()
     if(fruit.isFruitCreated())
     {
       fruit.display();
+      
+      if(fruit.isFruitPassed(p))
+      {
+        fruit.isCreated = false;
+        
+      }
+      
+      if(fruit.hasBeenEatenBy(p))
+      {
+        carpetJet.slowDown(p);
+      }
     }
     
     if(carpetJet.getOnBy(p))
@@ -122,7 +133,6 @@ void draw()
       if(!multipleHurdleCreated)
       {
         multipleHurdleCreated = true;
-        println("my Location before " + p.location.x);
         multi.getPosition(p);
       }
       
@@ -139,6 +149,7 @@ void draw()
     
     if(p.isOnJet())
     {  
+       println(p.speed);
       if(multi.gotJumpedBy(p))
       {
        multipleHurdleCreated = false;
