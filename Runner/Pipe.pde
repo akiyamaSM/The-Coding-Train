@@ -5,7 +5,7 @@ class Pipe
   float where;
   float wid = 40;
   float sizeMin = 80;
-  float SPACE = width;
+  float SPACE = 0.89 * width;
   PImage pipeUP;
   PImage pipeDown;
   Pipe(PImage pipeUP, PImage pipeDown)
@@ -16,7 +16,7 @@ class Pipe
   
   void generate()
   {
-    yHigh = random(2, width/2);
+    yHigh = random(2, height/2);
     yLow = yHigh + sizeMin;
     
     pipeUP.resize(int(wid), int(yHigh));
@@ -27,7 +27,7 @@ class Pipe
   {
     generate();
     float locationX = p.location.x;
-    where = SPACE  + locationX;
+    where = random(1, 1.6) *SPACE  + locationX;
   }
   
   void display()
